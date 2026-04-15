@@ -1161,7 +1161,8 @@ const SearchModal = ({ isOpen, onClose, onNavigate, onNavigateToDocs }: { isOpen
   const [aiResults, setAiResults] = useState<{ title: string, type: string, view: ViewState, icon: React.ReactNode, reason?: string, docsTabId?: string }[]>([]);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const ai = React.useMemo(() => new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY }), []);
+  const apiKey = typeof process !== 'undefined' ? process.env?.GEMINI_API_KEY : (import.meta.env.VITE_GEMINI_API_KEY || '');
+  const ai = React.useMemo(() => new GoogleGenAI({ apiKey: apiKey }), []);
 
   useEffect(() => {
     if (isOpen) {
