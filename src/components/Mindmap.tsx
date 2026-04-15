@@ -81,14 +81,6 @@ const v2MapData: MindmapNode = {
       type: 'search'
     },
     {
-      name: "Marketing",
-      type: 'category',
-      children: [
-        { name: "Overview", type: 'info' },
-        { name: "Campaigns", type: 'info' }
-      ]
-    },
-    {
       name: "Products",
       type: 'category',
       children: [
@@ -619,6 +611,11 @@ const v2MapData: MindmapNode = {
       ]
     },
     {
+      name: "Pricing",
+      type: 'category',
+      children: []
+    },
+    {
       name: "Resources",
       type: 'category',
       children: [
@@ -930,11 +927,17 @@ const v2MapData: MindmapNode = {
           name: "Connect",
           type: 'category',
           children: [
-            { name: "Discord", type: 'info' },
-            { name: "GitHub", type: 'info' },
-            { name: "YouTube", type: 'info' },
-            { name: "Google Maps Platform Awards", type: 'info' },
-            { name: "Google Maps Platform Innovators", type: 'info' },
+            {
+              name: "Community",
+              type: 'category',
+              children: [
+                { name: "Discord", type: 'info' },
+                { name: "GitHub", type: 'info' },
+                { name: "YouTube", type: 'info' },
+                { name: "Google Maps Platform Awards", type: 'info' },
+                { name: "Google Maps Platform Innovators", type: 'info' },
+              ]
+            },
             { 
               name: "Support resources", 
               type: 'info',
@@ -956,7 +959,7 @@ const currentStateData: MindmapNode = JSON.parse(JSON.stringify(v2MapData));
 currentStateData.name = "Current State Map";
 
 // Roll back Resources section to 30 mins ago (AI Products, AI Tools, Development, Learn, Community, Support)
-currentStateData.children[3].children = [
+currentStateData.children[4].children = [
   {
     name: "AI Products",
     type: 'category',
@@ -966,11 +969,6 @@ currentStateData.children[3].children = [
         type: 'info',
         children: [
           { name: "Documentation", type: 'docs', view: 'level2-datasets', docsTab: 'ai-grounding' },
-          { 
-            name: "Pricing Calculator", 
-            type: 'info', 
-            children: [{ name: "Pricing Details", type: 'pricing', view: 'level2-datasets' }] 
-          },
           { name: "Choose your platform", type: 'info', children: platformChildren }
         ]
       },
@@ -979,11 +977,6 @@ currentStateData.children[3].children = [
         type: 'info',
         children: [
           { name: "Documentation", type: 'docs', view: 'maker-concierge', docsTab: 'ai-maker-concierge' },
-          { 
-            name: "Pricing Calculator", 
-            type: 'info', 
-            children: [{ name: "Pricing Details", type: 'pricing', view: 'maker-concierge' }] 
-          },
           { name: "Choose your platform", type: 'info', children: platformChildren }
         ]
       },
@@ -992,11 +985,6 @@ currentStateData.children[3].children = [
         type: 'info',
         children: [
           { name: "Documentation", type: 'docs', view: 'level2-environment', docsTab: 'overview' },
-          { 
-            name: "Pricing Calculator", 
-            type: 'info', 
-            children: [{ name: "Pricing Details", type: 'pricing', view: 'level2-environment' }] 
-          },
           { name: "Choose your platform", type: 'info', children: platformChildren }
         ]
       },
@@ -1005,11 +993,6 @@ currentStateData.children[3].children = [
         type: 'info',
         children: [
           { name: "Documentation", type: 'docs', view: 'level2-ai', docsTab: 'contextual-view' },
-          { 
-            name: "Pricing Calculator", 
-            type: 'info', 
-            children: [{ name: "Pricing Details", type: 'pricing', view: 'level2-ai' }] 
-          },
           { name: "Choose your platform", type: 'info', children: platformChildren }
         ]
       },
@@ -1018,11 +1001,6 @@ currentStateData.children[3].children = [
         type: 'info',
         children: [
           { name: "Documentation", type: 'docs', view: 'level2-maps', docsTab: 'google-earth' },
-          { 
-            name: "Pricing Calculator", 
-            type: 'info', 
-            children: [{ name: "Pricing Details", type: 'pricing', view: 'level2-maps' }] 
-          },
           { name: "Choose your platform", type: 'info', children: platformChildren }
         ]
       },
@@ -1031,11 +1009,6 @@ currentStateData.children[3].children = [
         type: 'info',
         children: [
           { name: "Documentation", type: 'docs', view: 'level2-datasets', docsTab: 'geospatial-analytics' },
-          { 
-            name: "Pricing Calculator", 
-            type: 'info', 
-            children: [{ name: "Pricing Details", type: 'pricing', view: 'level2-datasets' }] 
-          },
           { name: "Choose your platform", type: 'info', children: platformChildren }
         ]
       },
@@ -1044,11 +1017,6 @@ currentStateData.children[3].children = [
         type: 'info',
         children: [
           { name: "Documentation", type: 'docs', view: 'level2-datasets', docsTab: 'vertex-ai' },
-          { 
-            name: "Pricing Calculator", 
-            type: 'info', 
-            children: [{ name: "Pricing Details", type: 'pricing', view: 'level2-datasets' }] 
-          },
           { name: "Choose your platform", type: 'info', children: platformChildren }
         ]
       },
@@ -1057,11 +1025,6 @@ currentStateData.children[3].children = [
         type: 'info',
         children: [
           { name: "Documentation", type: 'docs', view: 'level2-places', docsTab: 'summaries' },
-          { 
-            name: "Pricing Calculator", 
-            type: 'info', 
-            children: [{ name: "Pricing Details", type: 'pricing', view: 'level2-places' }] 
-          },
           { name: "Choose your platform", type: 'info', children: platformChildren }
         ]
       },
@@ -1071,14 +1034,14 @@ currentStateData.children[3].children = [
     name: "AI Tools",
     type: 'category',
     children: [
-      { name: "Builder agent", type: 'info' },
-      { name: "Maps Styling agent", type: 'info' },
-      { name: "Code Assist Toolkit", type: 'info' },
-      { name: "Route Optimization agent", type: 'info' },
+      { name: "Builder agent", type: 'info', children: [{ name: "Pricing", type: 'pricing' }] },
+      { name: "Maps Styling agent", type: 'info', children: [{ name: "Pricing", type: 'pricing' }] },
+      { name: "Code Assist Toolkit", type: 'info', children: [{ name: "Pricing", type: 'pricing' }] },
+      { name: "Route Optimization agent", type: 'info', children: [{ name: "Pricing", type: 'pricing' }] },
     ]
   },
-  JSON.parse(JSON.stringify(v2MapData.children[3].children[1])), // Development
-  JSON.parse(JSON.stringify(v2MapData.children[3].children[2])), // Learn
+  JSON.parse(JSON.stringify(v2MapData.children[4].children[1])), // Development
+  JSON.parse(JSON.stringify(v2MapData.children[4].children[2])), // Learn
   {
     name: "Community",
     type: 'category',
@@ -1193,28 +1156,28 @@ const currentSolutions = [
     name: "Use Cases",
     type: 'category',
     children: [
-      { name: "Build interactive experiences", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
-      { name: "Display the ideal location", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
-      { name: "Enable asset tracking", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
-      { name: "Enrich transactions", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
-      { name: "Improve addresses", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
-      { name: "Offer efficient routes", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
-      { name: "Provide local information", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
-      { name: "Visualize geospatial data", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
-      { name: "Explore & select sites", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
-      { name: "Analyze geospatial data", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
-      { name: "Collaborate & share", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
-      { name: "Ground AI responses", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] }
+      { name: "Build interactive experiences", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
+      { name: "Display the ideal location", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
+      { name: "Enable asset tracking", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
+      { name: "Enrich transactions", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
+      { name: "Improve addresses", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
+      { name: "Offer efficient routes", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
+      { name: "Provide local information", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
+      { name: "Visualize geospatial data", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
+      { name: "Explore & select sites", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
+      { name: "Analyze geospatial data", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
+      { name: "Collaborate & share", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
+      { name: "Ground AI responses", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] }
     ]
   },
   {
     name: "Industries",
     type: 'category',
     children: [
-      { name: "Financial Industries", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
-      { name: "Retail", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
-      { name: "Real Estate", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
-      { name: "Transportation & Logistics", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Pricing", type: 'pricing' }, { name: "Choose your platform", type: 'info', children: platformChildren }] }
+      { name: "Financial Industries", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
+      { name: "Retail", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
+      { name: "Real Estate", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] },
+      { name: "Transportation & Logistics", type: 'info', children: [{ name: "Documentation", type: 'info', children: docPlatformChildren }, { name: "Choose your platform", type: 'info', children: platformChildren }] }
     ]
   }
 ];
@@ -1609,8 +1572,7 @@ const pruneCurrentState = (node: MindmapNode, isUnderProducts: boolean = false) 
       });
 
       node.children = node.children.filter(child => 
-        child.name !== "Pricing" && 
-        child.name !== "Documentation"
+        child.name !== "Documentation" && child.name !== "Pricing"
       );
     }
     node.children.forEach(child => pruneCurrentState(child, underProducts));
