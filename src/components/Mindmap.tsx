@@ -1213,6 +1213,46 @@ const currentPricing = [
         type: 'pricing',
         children: currentSolutions.map(s => ({ name: s.name, type: 'pricing' }))
       },
+      { 
+        name: "Google Earth", 
+        type: 'pricing', 
+        children: [
+          { name: "Standard", type: 'pricing' },
+          { name: "Advanced", type: 'pricing' },
+          { name: "Professional Advanced", type: 'pricing' }
+        ]
+      },
+      {
+        name: "AI & Tools",
+        type: 'product',
+        children: [
+          {
+            name: "Products",
+            type: 'category',
+            children: [
+              { name: "Grounding with Google Maps", type: 'pricing', children: platformChildren },
+              { name: "Maker Concierge", type: 'pricing', children: platformChildren },
+              { name: "AI Tools", type: 'pricing', children: platformChildren },
+              { name: "Grounding Lite", type: 'pricing', children: platformChildren },
+              { name: "Google Maps AI Kit - Contextual View", type: 'pricing', children: platformChildren },
+              { name: "Google Earth", type: 'pricing', children: platformChildren },
+              { name: "Geospatial Analytics", type: 'pricing', children: platformChildren },
+              { name: "Grounding with Google Maps in Vertex AI", type: 'pricing', children: platformChildren },
+              { name: "Place, area, and review summaries", type: 'pricing', children: platformChildren },
+            ]
+          },
+          {
+            name: "Tools",
+            type: 'category',
+            children: [
+              { name: "Builder agent", type: 'pricing', children: platformChildren },
+              { name: "Maps Styling agent", type: 'pricing', children: platformChildren },
+              { name: "Code Assist Toolkit", type: 'pricing', children: platformChildren },
+              { name: "Route Optimization agent", type: 'pricing', children: platformChildren },
+            ]
+          }
+        ]
+      },
       { name: "↗ Subscribe to save", type: 'pricing' }
     ]
   },
@@ -1225,46 +1265,6 @@ const currentPricing = [
       { name: "Essential", type: 'pricing' },
       { name: "Pro", type: 'pricing' },
       { name: "↗ Pay as you go", type: 'pricing' }
-    ]
-  },
-  { 
-    name: "Google Earth", 
-    type: 'pricing', 
-    children: [
-      { name: "Standard", type: 'pricing' },
-      { name: "Advanced", type: 'pricing' },
-      { name: "Professional Advanced", type: 'pricing' }
-    ]
-  },
-  {
-    name: "AI & Tools",
-    type: 'product',
-    children: [
-      {
-        name: "Products",
-        type: 'category',
-        children: [
-          { name: "Grounding with Google Maps", type: 'pricing', children: platformChildren },
-          { name: "Maker Concierge", type: 'pricing', children: platformChildren },
-          { name: "AI Tools", type: 'pricing', children: platformChildren },
-          { name: "Grounding Lite", type: 'pricing', children: platformChildren },
-          { name: "Google Maps AI Kit - Contextual View", type: 'pricing', children: platformChildren },
-          { name: "Google Earth", type: 'pricing', children: platformChildren },
-          { name: "Geospatial Analytics", type: 'pricing', children: platformChildren },
-          { name: "Grounding with Google Maps in Vertex AI", type: 'pricing', children: platformChildren },
-          { name: "Place, area, and review summaries", type: 'pricing', children: platformChildren },
-        ]
-      },
-      {
-        name: "Tools",
-        type: 'category',
-        children: [
-          { name: "Builder agent", type: 'pricing', children: platformChildren },
-          { name: "Maps Styling agent", type: 'pricing', children: platformChildren },
-          { name: "Code Assist Toolkit", type: 'pricing', children: platformChildren },
-          { name: "Route Optimization agent", type: 'pricing', children: platformChildren },
-        ]
-      }
     ]
   }
 ];
@@ -1617,12 +1617,30 @@ const flattenNodes = (node: MindmapNode, targetName: string) => {
   }
 };
 
+const convertV2PlatformJumpLinks = (node: MindmapNode) => {
+  if (node.name === "Choose your platform" && node.children) {
+    node.children.forEach(child => {
+      if (PLATFORM_NAMES.includes(child.name)) {
+        child.name = `↗ ${child.name}`;
+        if (child.children) {
+          child.children = child.children.filter(c => c.name !== "Documentation");
+        }
+      }
+    });
+  }
+  if (node.children) {
+    node.children.forEach(convertV2PlatformJumpLinks);
+  }
+};
+
 injectPlatformDocs(v2MapData);
 injectPlatformDocs(currentStateData);
+convertV2PlatformJumpLinks(v2MapData);
 flattenNodes(v2MapData, "Product Suite");
 flattenNodes(currentStateData, "Product Suite");
 flattenNodes(v2MapData, "API Features");
 flattenNodes(currentStateData, "API Features");
+flattenNodes(v2MapData, "Choose your platform");
 flattenNodes(currentStateData, "Choose your platform");
 pruneCurrentState(currentStateData);
 pruneDocumentationPlatforms(currentStateData);
@@ -1630,7 +1648,7 @@ pruneDocumentationPlatforms(currentStateData);
 export const Mindmap: React.FC<MindmapProps> = ({ onNavigate, onNavigateToDocs }) => {
   const svgRef = useRef<SVGSVGElement>(null);
   const zoomRef = useRef<any>(null);
-  const [selectedVersion, setSelectedVersion] = React.useState<'v2' | 'current'>('current');
+  const [selectedVersion, setSelectedVersion] = React.useState<'v2' | 'current'>('v2');
   const [resetKey, setResetKey] = React.useState(0);
   const [searchQuery, setSearchQuery] = React.useState('');
   const [searchResults, setSearchResults] = React.useState<MindmapNode[]>([]);
@@ -1924,6 +1942,11 @@ export const Mindmap: React.FC<MindmapProps> = ({ onNavigate, onNavigateToDocs }
         }
       }
 
+      // Force "Pricing Details" to just open the "Pricing" branch root per user request for V2
+      if (selectedVersion === 'v2' && cleanNodeName === 'pricing details') {
+        targetNode = pricingBranch;
+      }
+
       // 2. General logic for non-documentation links (or if doc search somehow failed to find even a fallback)
       if (!targetNode) {
         if (parentName) {
@@ -2143,13 +2166,41 @@ export const Mindmap: React.FC<MindmapProps> = ({ onNavigate, onNavigateToDocs }
             const typeLabel = d.data.type === 'pricing' ? "Pricing" : "Documentation";
             const rootName = typeLabel;
             
+            // For v2, if we clicked "Documentation" node, we definitely want to jump to Documentation branch
+            // Unless we are already inside it.
+            
             // Check if we are already inside the target branch
+            // We refine this for V2: if we are under "Resources", we are inside.
             let isInsideTargetBranch = false;
             let temp = d;
             while (temp) {
               if (temp.data.name === rootName) {
-                isInsideTargetBranch = true;
-                break;
+                // In v2, the canonical branches are under Resources or are top-level.
+                // If it's "Documentation", it MUST have "Resources" as an ancestor to be "inside".
+                if (rootName === "Documentation") {
+                  let hasResourcesAncestor = false;
+                  let t2 = temp;
+                  while (t2) {
+                    if (t2.data.name === "Resources") {
+                      hasResourcesAncestor = true;
+                      break;
+                    }
+                    t2 = t2.parent;
+                  }
+                  if (hasResourcesAncestor) {
+                    isInsideTargetBranch = true;
+                    break;
+                  }
+                } else if (rootName === "Pricing") {
+                  // Pricing is top-level or has GCP parent
+                  if (!temp.parent || temp.parent.data.name === "Google Maps Platform") {
+                    isInsideTargetBranch = true;
+                    break;
+                  }
+                } else {
+                   isInsideTargetBranch = true;
+                   break;
+                }
               }
               temp = temp.parent;
             }
@@ -2232,7 +2283,30 @@ export const Mindmap: React.FC<MindmapProps> = ({ onNavigate, onNavigateToDocs }
               return null;
             };
 
-            const targetRoot = findNodeByName(root, rootName);
+            let targetRoot: any = null;
+            
+            // Prefer root-level paths for known branch types to avoid getting stuck on leaf nodes
+            if (rootName === "Pricing") {
+              const children = (root as any).children || (root as any)._children || [];
+              targetRoot = children.find((c: any) => c.data.name === "Pricing");
+            } else if (rootName === "Documentation") {
+              const res = ((root as any).children || (root as any)._children || []).find((c: any) => c.data.name === "Resources");
+              if (res) {
+                const dev = (res.children || res._children || []).find((c: any) => c.data.name === "Development");
+                if (dev) {
+                  targetRoot = (dev.children || dev._children || []).find((c: any) => c.data.name === "Documentation");
+                }
+              }
+              if (!targetRoot) {
+                // Current State map might have Documentation somewhere else, e.g. root
+                const children = (root as any).children || (root as any)._children || [];
+                targetRoot = children.find((c: any) => c.data.name === "Documentation");
+              }
+            }
+            
+            if (!targetRoot) {
+              targetRoot = findNodeByName(root, rootName);
+            }
             
             if (targetRoot) {
               // Expand all ancestors of targetRoot and collapse their siblings
@@ -2263,6 +2337,13 @@ export const Mindmap: React.FC<MindmapProps> = ({ onNavigate, onNavigateToDocs }
               // Find the best search root by looking for ancestors in the target branch
               // This ensures we narrow down the search to the correct product/API subtree
               let searchRoot = targetRoot;
+              
+              // For Pricing links, prioritize the "Pay as you go" branch to satisfy "Parallel branch in Pricing/pay as you go"
+              if (typeLabel === "Pricing") {
+                const payAsYouGo = findNodeByName(targetRoot, "Pay as you go");
+                if (payAsYouGo) searchRoot = payAsYouGo;
+              }
+
               const ancestors = d.ancestors();
               const genericNames = ["Product", "Products", "Product Suite", "Choose your platform", "Documentation", "Pricing Calculator", "Pricing Details", "Overview", "Current State", "Resources", "Google Maps Platform"];
               
@@ -2278,14 +2359,26 @@ export const Mindmap: React.FC<MindmapProps> = ({ onNavigate, onNavigateToDocs }
                 }
               }
               
-              let targetNode: any = null;
-              let currSearch = d;
-              
+            let targetNode: any = null;
+            let currSearch = d;
+            
+            // Force "Pricing Details" to just open the "Pricing" branch root per user request
+            // And force "Documentation" to open the matched product root in the documentation tree
+            if (selectedVersion === 'v2') {
+              if (d.data.name === "Pricing Details") {
+                targetNode = targetRoot;
+              } else if (d.data.name === "Documentation" || d.data.name === "↗ Documentation") {
+                targetNode = searchRoot;
+              }
+            }
+            
+            if (!targetNode) {
               while (currSearch && !targetNode) {
                 const searchName = currSearch.data.name.replace("↗ ", "");
                 targetNode = findNodeByName(searchRoot, searchName);
                 if (!targetNode) currSearch = currSearch.parent;
               }
+            }
 
               if (targetNode) {
                 // Global Accordion: Collapse all nodes except ancestors of targetNode

@@ -1,5 +1,6 @@
 {
-  "name": "MindMap2: Geo Portfolio Migration 2.0",
+  "name": "MindMap 3: Geo Portfolio Migration 2.0",
   "description": "A clean, modern website template inspired by the Google Maps Developers portal, featuring a documentation-style layout with sidebars and hero sections.",
-  "requestFramePermissions": []
+  "requestFramePermissions": [],
+  "majorCapabilities": []
 }
