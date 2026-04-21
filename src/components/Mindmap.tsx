@@ -132,7 +132,7 @@ const v2MapData: MindmapNode = {
                   ]
                 },
                 { 
-                  name: "Tiles", 
+                  name: "Map Tiles", 
                   type: 'info',
                   children: [
                     { name: "Documentation", type: 'docs', view: 'level2-maps', docsTab: 'maps-tiles' },
@@ -767,7 +767,7 @@ const v2MapData: MindmapNode = {
                         { name: "3D Maps", type: 'docs', children: platformChildren },
                         { name: "Aerial View", type: 'docs', children: platformChildren },
                         { name: "Maps SDKs", type: 'docs', children: platformChildren },
-                        { name: "Tiles", type: 'docs', children: platformChildren },
+                        { name: "Map Tiles", type: 'docs', children: platformChildren },
                         { name: "Google Earth", type: 'docs', children: platformChildren },
                         { name: "Contextual View", type: 'docs', children: platformChildren },
                       ]
